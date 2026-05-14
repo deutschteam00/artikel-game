@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Артикли немецких слов</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f9;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .game {
+      max-width: 700px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      margin-bottom: 10px;
+    }
+
+    .word {
+      font-size: 34px;
+      margin: 30px 0 10px;
+      color: #333;
+    }
+
+    .translation {
+      color: #777;
+      margin-bottom: 25px;
+      font-size: 18px;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      padding: 14px 26px;
+      font-size: 20px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .die { background: #ffb3c1; }
+    .der { background: #a0c4ff; }
+    .das { background: #caffbf; }
+
+    button:hover {
+      transform: scale(1.05);
+    }
+
+    .result {
+      margin-top: 25px;
+      font-size: 24px;
+      min-height: 40px;
+      font-weight: bold;
+    }
+
+    .score {
+      margin-top: 20px;
+      font-size: 20px;
+      color: #444;
+    }
+
+    .next-btn {
+      margin-top: 20px;
+      background: #222;
+      color: white;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+<div class="game">
+  <h1>🇩🇪 Тренировка артиклей</h1>
+  <p>Выбери правильный артикль</p>
+
+  <div class="word" id="word">Disziplin</div>
+  <div class="translation" id="translation">дисциплина</div>
+
+  <div class="buttons">
+    <button class="der" onclick="checkAnswer('der')">der</button>
+    <button class="die" onclick="checkAnswer('die')">die</button>
+    <button class="das" onclick="checkAnswer('das')">das</button>
+  </div>
+
+  <div class="result" id="result"></div>
+
+  <button class="next-btn" id="nextBtn" onclick="nextWord()">
+    Следующее слово
+  </button>
+
+  <div class="score" id="score">
+    Правильно: 0 | Ошибок: 0
+  </div>
+</div>
+
+<script>
+  const words = [
+    { article: "die", word: "Disziplin", ru: "дисциплина" },
+    { article: "die", word: "Offenheit", ru: "открытость" },
+    { article: "die", word: "Neugier", ru: "любопытство" },
+    { article: "die", word: "Energie", ru: "энергия" },
+    { article: "der", word: "Respekt", ru: "уважение" },
+    { article: "die", word: "Stärke", ru: "сила" },
+    { article: "das", word: "Talent", ru: "талант" },
+    { article: "die", word: "Ausdauer", ru: "выносливость" },
+    { article: "die", word: "Geduld", ru: "терпение" }
+  ];
+
+  let current = 0;
+  let correct = 0;
+  let wrong = 0;
+
+  function showWord() {
+    document.getElementById("word").textContent = words[current].word;
+    document.getElementById("translation").textContent = words[current].ru;
+    document.getElementById("result").textContent = "";
+    document.getElementById("nextBtn").style.display = "none";
+  }
+
+  function checkAnswer(answer) {
+    const correctArticle = words[current].article;
+    const result = document.getElementById("result");
+
+    if (answer === correctArticle) {
+      result.textContent = "✅ Правильно!";
+      result.style.color = "green";
+      correct++;
+    } else {
+      result.textContent = `❌ Неправильно! Правильный артикль: ${correctArticle}`;
+      result.style.color = "red";
+      wrong++;
+    }
+
+    document.getElementById("score").textContent =
+      `Правильно: ${correct} | Ошибок: ${wrong}`;
+
+    document.getElementById("nextBtn").style.display = "inline-block";
+  }
+
+  function nextWord() {
+    current++;
+
+    if (current >= words.length) {
+      document.querySelector(".game").innerHTML = `
+        <h1>🎉 Игра окончена!</h1>
+        <p style="font-size:24px;">
+          Правильно: ${correct}<br>
+          Ошибок: ${wrong}
+        </p>
+        <button onclick="location.reload()"
+          style="
+            padding:14px 24px;
+            font-size:20px;
+            border:none;
+            border-radius:12px;
+            background:#222;
+            color:white;
+            cursor:pointer;
+          ">
+          Играть снова
+        </button>
+      `;
+      return;
+    }
+
+    showWord();
+  }
+
+  showWord();
+</script>
+
+</body>
+</html>
